@@ -18,18 +18,11 @@ public class Ammo : MonoBehaviour
     #region Params
 
     [SerializeField] Rigidbody rb;
-    [SerializeField] Material material;
-    LayerMask layerToIgnore;
     float damage; 
     #endregion
 
-    public void SetStartParams(Vector3 direction, Color color, LayerMask layer, float damage)
-    {
-        rb.velocity = direction;
-        material.color = color;
-        this.damage = damage;
-      
-    }
+    
+
     private void OnTriggerEnter(Collider other)
     {
         IDamageTaker damageTaker = other.GetComponent<IDamageTaker>();

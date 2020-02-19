@@ -28,9 +28,7 @@ public class AmmoPool : IAmmoGiver, IAmmoTaker
 
     public void RetutrnToPool(Ammo ammo)
     {
-        Debug.Log("Here");
         ammoSet.Add(ammo);
         ammo.gameObject.SetActive(false);
-        Debug.Log(ammoSet.Count);
     }
 }

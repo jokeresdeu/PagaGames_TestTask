@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class DamageDealer :MonoBehaviour 
 {
-    IDamageDealer damageDealer;
-    private void Start()
+
+    [SerializeField] float radius;
+    [SerializeField] LayerMask whatIsPlayer;
+    public IDamageTaker CanAtack()
     {
-        damageDealer = GetComponent<IDamageDealer>();
-    }
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        Character character = other.GetComponent<Character>();
-        if(character!=null&&damageDealer.CanDealDamage)
+        Collider[] coll = Physics.OverlapSphere(transform.position, radius, whatIsPlayer);
+        if (coll.Length != 0)
         {
-            character.TakeDamage(damageDealer.Damage);
+            Debug.Log(coll[0].name);
+            Debug.Log(coll[0].GetComponent<IDamageTaker>());
+            return coll[0].GetComponent<IDamageTaker>();
         }
+        else return null;
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, radius);
+    }
+
 }
