@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class CharacterStats<T> : MonoBehaviour, IDamageTaker where T:SavedStats  
+public abstract class CharacterStats : MonoBehaviour, IDamageTaker 
 {
-    [SerializeField] Slider hpBar;
-    [SerializeField]protected int hp;
+    [SerializeField]Slider hpBar;
+    protected int hp;
+   [SerializeField] protected string characterType;
+    public string CharacterType { get { return characterType; } }
 
     protected int currentHP;
     public float CurrentHp { get { return currentHP; } }
-    [SerializeField] protected float speed;
+
+    protected float speed;
     public float Speed { get { return speed; } }
-     protected float atackSpeed;
+
+    protected float atackSpeed;
     public float AtackSpeed { get { return atackSpeed; } }
-    public virtual void SetStats(T stats)
+
+    public virtual void SetStats(SavedStats stats)
     {
         hp = stats.hp;
         currentHP = hp;
@@ -40,7 +45,6 @@ public abstract class CharacterStats<T> : MonoBehaviour, IDamageTaker where T:Sa
     {
         currentHP -= (int)damage;
         hpBar.value = currentHP;
-        Debug.Log("Here");
         if (currentHP<= 0)
             Death();
     }

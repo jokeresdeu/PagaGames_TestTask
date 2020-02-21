@@ -1,22 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public abstract class CharacterStateController : MonoBehaviour 
+using Zenject;
+public abstract class CharacterStateController : MonoBehaviour
 {
     protected Animator animator;
-    protected bool canAtack=true;
-    [SerializeField]protected Transform target;
+    protected Rigidbody target;
+    protected ITargetGiver targetGiver;
+    [Inject]
+    void Construct(ITargetGiver targetGiver)
+    {
+        this.targetGiver = targetGiver;
+    }
     protected virtual void Start()
     {
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
     }
     public virtual void Atack()
     {
 
-    }
-    protected virtual void ChooseState()
-    {
-      
     }
 }

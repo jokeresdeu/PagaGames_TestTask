@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class MeleCharacterStats : CharacterStats<SavedStats> 
+public abstract class MeleCharacterStats : CharacterStats
 {
-    [SerializeField]protected float damage;
+    protected float damage;
     public float Damage { get { return damage; } }
     public override void SetStats(SavedStats stats)
     {

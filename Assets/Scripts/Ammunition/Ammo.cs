@@ -4,12 +4,12 @@ using UnityEngine;
 using Zenject;
 
 public class Ammo : MonoBehaviour
-{ 
+{
     #region DI
     public class Factory : PlaceholderFactory<Ammo> { }
     IAmmoTaker ammoTaker;
     [Inject]
-    public void Contstruct(IAmmoTaker ammoTaker)
+    void Contstruct(IAmmoTaker ammoTaker)
     {
         this.ammoTaker = ammoTaker;
     }
@@ -18,14 +18,12 @@ public class Ammo : MonoBehaviour
     #region Params
 
     [SerializeField] Rigidbody rb;
-    float damage; 
+    float damage;
+    public float Damage{ set { damage = value; } }
     #endregion
-
-    
-
     private void OnTriggerEnter(Collider other)
     {
-        IDamageTaker damageTaker = other.GetComponent<IDamageTaker>();
+        IDamageTaker damageTaker = other.GetComponentInParent<IDamageTaker>();
         if (damageTaker != null)
         {
             damageTaker.TakeDamage(damage);

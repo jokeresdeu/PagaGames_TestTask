@@ -29,6 +29,7 @@ public class AmmoPool : IAmmoGiver, IAmmoTaker
     public void RetutrnToPool(Ammo ammo)
     {
         ammoSet.Add(ammo);
+        ammo.transform.rotation = new Quaternion(0, 0, 0, 0);
         ammo.gameObject.SetActive(false);
     }
 }

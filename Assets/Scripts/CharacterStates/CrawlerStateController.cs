@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using Zenject;
 
 public class CrawlerStateController : CharacterStateController
 {
@@ -17,9 +18,10 @@ public class CrawlerStateController : CharacterStateController
     {
         base.Start();
         crawlerStats = GetComponent<CrawlerStats>();
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        damageDealer = GetComponent<DamageDealer>();
+        navMeshAgent = GetComponentInChildren<NavMeshAgent>();
+        damageDealer = GetComponentInChildren<DamageDealer>();
         navMeshAgent.speed = crawlerStats.Speed;
+        target = targetGiver.Player;
         StartCoroutine(GetDestenation());
 
     }
@@ -37,7 +39,7 @@ public class CrawlerStateController : CharacterStateController
     {
         ChooseState();
     }
-    protected override void ChooseState()
+    protected void ChooseState()
     {
         player = damageDealer.CanAtack();
         if (player == null)
@@ -59,6 +61,8 @@ public class CrawlerStateController : CharacterStateController
     }
     public override void Atack()
     {
-        player.TakeDamage(crawlerStats.Damage);
+        if(player!=null)
+         player.TakeDamage(crawlerStats.Damage);
     }
+    public class Factory : PlaceholderFactory<CrawlerStateController> { }
 }

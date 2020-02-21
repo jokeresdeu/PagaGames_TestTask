@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ArcherStats<T> : CharacterStats<T> where T : SavedArcherStats 
+public abstract class ArcherStats : CharacterStats
 {
-    [SerializeField]protected float ammoSpeed;
+    protected float ammoSpeed;
     public float AmmoSpeed { get { return ammoSpeed; } }
-    [SerializeField]protected float ammoDamage;
+    protected float ammoDamage;
     public float AmmoDamage { get { return ammoDamage; } }
-    public  override void SetStats(T stats)
+    public  override void SetStats(SavedStats stats)
     {
         base.SetStats(stats);
         ammoSpeed = stats.ammoSpeed;

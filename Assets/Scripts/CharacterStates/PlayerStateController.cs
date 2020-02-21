@@ -3,39 +3,53 @@ using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
-public class PlayerStateController : CharacterStateController 
+public class PlayerStateController : ArcherStateController  
 {
-    IShooter shooter;
-    [Inject]
-    public void Construct(IShooter shooter)
-    {
-        this.shooter = shooter;
-    }
+    
     #region Params
-    [Header("Shooter")]
-    [SerializeField] Material material;
-    [SerializeField] int layer;
-    [SerializeField] Transform muzzle;
+   
     PlayerStats playerStats;
     Mover mover;
     InputController inputController;
+    Vector3 lookAt;
     #endregion 
-    public bool CanAtack { get { return canAtack; } set { canAtack = value; } }
+    
     protected override void Start()
     {
         base.Start();
         playerStats = GetComponent<PlayerStats>();
-        mover = GetComponent<Mover>();
-        inputController = GetComponent<InputController>();
+        mover = GetComponentInChildren<Mover>();
+        inputController = GetComponentInChildren<InputController>();
     }
+    void GetNewTarget()
+    {
+        float distanse=0;
+        float temp=0;
+        for (int i = 0; i < targetGiver.Enemies.Count; i++)
+        {
+            if (targetGiver.Enemies[i] != null)
+            {
+                if (distanse == 0)
+                    distanse = Vector3.Distance(transform.position, targetGiver.Enemies[i].transform.position);
+                temp = Vector3.Distance(transform.position, targetGiver.Enemies[i].transform.position);
+                if (distanse >= temp)
+                {
+                    distanse = temp;
+                    target = targetGiver.Enemies[i];
+                }
+            }
+                
+           
+        }
 
+    }
     // Update is called once per frame
     private void FixedUpdate()
     {
         mover.Move(inputController.Direction, playerStats.Speed);
         ChooseState();
     }
-    protected override void  ChooseState()
+    protected void  ChooseState()
     {
         if (inputController.Direction != Vector3.zero)
         {
@@ -43,20 +57,28 @@ public class PlayerStateController : CharacterStateController
         }
         else
         {
+            if(!animator.GetBool("Shoot"))
+                GetNewTarget();
             animator.SetBool("Run", false);
             if (target != null)
             {
                 animator.SetBool("Shoot", true);
-                transform.LookAt(target);
+                lookAt.x = target.transform.position.x;
+                lookAt.y = transform.position.y;
+                lookAt.z = target.transform.position.z;
+                mover.transform.LookAt(lookAt);
             }
             else
             {
+                GetNewTarget();
                 animator.SetBool("Shoot", false);
             }
         }
     }
     public override void Atack()
     {
-        shooter.SetAmmoAndShoot(1, target, muzzle, playerStats.AmmoDamage, playerStats.AmmoSpeed, material, layer);
+        if (target != null)
+             shooter.SetAmmoAndShoot(1, target.transform, muzzle, playerStats.AmmoDamage, playerStats.AmmoSpeed, material, layer);
     }
+    public class Factory : PlaceholderFactory<PlayerStateController> { }
 }

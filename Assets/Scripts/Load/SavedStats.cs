@@ -9,4 +9,6 @@ public class SavedStats
     public float movementSpeed;
     public float atackSpeed;
     public int damage;
+    public float ammoSpeed;
+    public float ammoDamage;
 }

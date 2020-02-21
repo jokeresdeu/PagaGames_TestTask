@@ -12,9 +12,7 @@ public class DamageDealer :MonoBehaviour
         Collider[] coll = Physics.OverlapSphere(transform.position, radius, whatIsPlayer);
         if (coll.Length != 0)
         {
-            Debug.Log(coll[0].name);
-            Debug.Log(coll[0].GetComponent<IDamageTaker>());
-            return coll[0].GetComponent<IDamageTaker>();
+            return coll[0].GetComponentInParent<IDamageTaker>();
         }
         else return null;
     }
